@@ -2458,7 +2458,7 @@ const message = {
 };
 
 export default {
-    ...fit2cloudEnLocale,
+    ...fit2cloudPtBrLocale,
     ...message,
-    ...xpackEnLocale,
+    ...xpackPtBrLocale,
 };
