@@ -12,9 +12,10 @@ ErrApiConfigStatusInvalid: "API Interface access prohibited: {{ .detail }}"
 ErrApiConfigKeyInvalid: "API Interface key error: {{ .detail }}"
 ErrApiConfigIPInvalid: "API Interface IP is not on the whitelist: {{ .detail }}"
 ErrApiConfigDisable: "This interface prohibits the use of API Interface calls: {{ .detail }}"
+ErrApiConfigKeyTimeInvalid: "API Interface timestamp error: {{ .detail }}"
 
 #common
-ErrNameIsExist: "Name is already exist"
+ErrNameIsExist: "Name already exists"
 ErrDemoEnvironment: "Demo server, prohibit this operation!"
 ErrCmdTimeout: "Command execution timed out!"
 ErrCmdIllegal: "The command contains illegal characters. Please modify and try again!"
@@ -31,7 +32,7 @@ SystemRestart: "System restart causes task interruption"
 #app
 ErrPortInUsed: "{{ .detail }} port already in use"
 ErrAppLimit: "App exceeds install limit"
-ErrAppRequired: "{{ .detail }} app is required"
+ErrAppRequired: "The {{ .detail }} app is required"
 ErrNotInstall: "App not installed"
 ErrPortInOtherApp: "{{ .port }} port  already in use by app  {{ .apps }}"
 ErrDbUserNotValid: "Stock database, username and password do not match!"
@@ -59,7 +60,7 @@ ErrContainerNotFound: '{{ .name }} container does not exist'
 ErrContainerMsg: '{{ .name }} container is abnormal, please check the log on the container page for details'
 ErrAppBackup: '{{ .name }} application backup failed err {{.err}}'
 ErrImagePull: '{{ .name }} image pull failed err {{.err}}'
-ErrVersionTooLow: 'The current 1Panel version is too low to update the app store, please upgrade the version'
+ErrVersionTooLow: 'The current 1Panel version is too low for updating the app store, please upgrade the version'
 ErrAppNameExist: 'App name is already exist'
 AppStoreIsSyncing: 'The App Store is syncing, please try again later'
 ErrGetCompose: "Failed to obtain docker-compose.yml file! {{ .detail }}"
@@ -88,8 +89,8 @@ ErrInvalidChar: "Illegal characters are prohibited"
 ErrPathNotDelete: "The selected directory cannot be deleted"
 
 #website
-ErrDomainIsExist: "Domain is already exist"
-ErrAliasIsExist: "Alias is already exist"
+ErrDomainIsExist: "The domain name already exists"
+ErrAliasIsExist: "The alias already exists"
 ErrAppDelete: 'Other Website use this App'
 ErrGroupIsUsed: "The group is in use and can't be deleted"
 ErrBackupMatch: "the backup file doesn't match the current partial data of the website: {{ .detail}}"
@@ -145,12 +146,13 @@ ErrTypeOfRedis: "The recovery file type does not match the current persistence m
 #container
 ErrInUsed: "{{ .detail }} is in use and can't be deleted"
 ErrObjectInUsed: "This object is in use and can't be deleted"
+ErrObjectBeDependent: "This image is dependent on other images and can't be deleted"
 ErrPortRules: "The number of ports does not match, please re-enter!"
 ErrPgImagePull: "Image pull timeout. Please configure image acceleration or manually pull the postgres:16.0-alpine image and try again"
 
 #runtime
-ErrDirNotFound: "The build folder does not exist! Please check file integrity!"
-ErrFileNotExist: "{{ .detail }} file does not exist! Please check source file integrity!"
+ErrDirNotFound: "The build folder does not exist! Please check the integrity of the file!"
+ErrFileNotExist: "{{ .detail }} file does not exist! Please check the integrity of the source file!"
 ErrImageBuildErr: "Image build failed"
 ErrImageExist: "Image is already exist!"
 ErrDelWithWebsite: "The operating environment has been associated with a website and cannot be deleted"
@@ -203,6 +205,7 @@ ErrIPExist: "IP is exit"
 #license
 ErrLicense: "License format error, please check and try again!"
 ErrLicenseCheck: "License verification failed, please check and try again!"
+ErrXpackVersion: "License verification failed, this license is version-restricted and cannot be successfully imported. Please check and try again!";
 ErrLicenseSave: "Failed to save license information, error {{ .err }}, please try again!"
 ErrLicenseSync: "Failed to sync license information, no license information detected in the database!"
 ErrXpackNotFound: "This section is a professional edition feature, please import the license first in Panel Settings-License interface"

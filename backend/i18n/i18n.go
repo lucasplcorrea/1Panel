@@ -75,7 +75,6 @@ func GetMsgByKey(key string) string {
 	return content
 }
 
-//go:embed lang/*
 var fs embed.FS
 var bundle *i18n.Bundle
 
@@ -106,17 +105,15 @@ func Init() {
 	_, _ = bundle.LoadMessageFileFS(fs, "lang/pt.yaml")
 	// (dev: lucasplcorrea) - Add pt-BR.yaml
 	_, _ = bundle.LoadMessageFileFS(fs, "lang/pt-BR.yaml")
+	_, _ = bundle.LoadMessageFileFS(fs, "lang/jp.yaml")
+	_, _ = bundle.LoadMessageFileFS(fs, "lang/ru.yaml")
+	_, _ = bundle.LoadMessageFileFS(fs, "lang/ms.yaml")
 }
 
 func UseI18nForCmd(lang string) {
 	if lang == "" {
 		lang = "en"
 	}
-
-	// (dev: lucasplcorrea) - Commented because pt-BR is now an individual language, separate from pt, remove in eventual updates
-	// if lang == "pt-BR" {
-	// 	lang = "pt"
-	// }
 
 	if bundle == nil {
 		Init()

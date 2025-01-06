@@ -8,8 +8,6 @@ import (
 	"github.com/1Panel-dev/1Panel/backend/constant"
 	"github.com/1Panel-dev/1Panel/backend/global"
 	"github.com/1Panel-dev/1Panel/backend/utils/captcha"
-	"github.com/1Panel-dev/1Panel/backend/utils/common"
-	"github.com/1Panel-dev/1Panel/backend/utils/geo"
 	"github.com/gin-gonic/gin"
 )
 
@@ -121,7 +119,7 @@ func (b *BaseApi) GetResponsePage(c *gin.Context) {
 
 // @Tags Auth
 // @Summary Check System isDemo
-// @Success 200
+// @Success 200 {boolean} isDemo
 // @Router /auth/demo [get]
 func (b *BaseApi) CheckIsDemo(c *gin.Context) {
 	helper.SuccessWithData(c, global.CONF.System.IsDemo)
@@ -129,7 +127,7 @@ func (b *BaseApi) CheckIsDemo(c *gin.Context) {
 
 // @Tags Auth
 // @Summary Check System isIntl
-// @Success 200
+// @Success 200 {boolean} isIntl
 // @Router /auth/intl [get]
 func (b *BaseApi) CheckIsIntl(c *gin.Context) {
 	helper.SuccessWithData(c, global.CONF.System.IsIntl)
@@ -137,7 +135,7 @@ func (b *BaseApi) CheckIsIntl(c *gin.Context) {
 
 // @Tags Auth
 // @Summary Load System Language
-// @Success 200
+// @Success 200 {string} language
 // @Router /auth/language [get]
 func (b *BaseApi) GetLanguage(c *gin.Context) {
 	settingInfo, err := settingService.GetSettingInfo()
@@ -157,11 +155,6 @@ func saveLoginLogs(c *gin.Context, err error) {
 		logs.Status = constant.StatusSuccess
 	}
 	logs.IP = c.ClientIP()
-	address, err := geo.GetIPLocation(logs.IP, common.GetLang(c))
-	if err != nil {
-		global.LOG.Errorf("get ip location failed: %s", err)
-	}
 	logs.Agent = c.GetHeader("User-Agent")
-	logs.Address = address
 	_ = logService.CreateLoginLog(logs)
 }

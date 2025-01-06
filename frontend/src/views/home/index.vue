@@ -9,7 +9,7 @@
             ]"
         >
             <template #route-button>
-                <div class="router-button" v-if="!isProductPro && !globalStore.isIntl">
+                <div class="router-button" v-if="!isProductPro">
                     <el-button link type="primary" @click="toUpload">
                         {{ $t('license.levelUpPro') }}
                     </el-button>
@@ -121,7 +121,7 @@
                         </el-select>
                     </template>
                     <template #body>
-                        <div style="position: relative; margin-top: 20px">
+                        <div style="position: relative; margin-top: 60px">
                             <div class="monitor-tags" v-if="chartOption === 'network'">
                                 <el-tag>
                                     {{ $t('monitor.up') }}: {{ computeSizeFromKBs(currentChartInfo.netBytesSent) }}

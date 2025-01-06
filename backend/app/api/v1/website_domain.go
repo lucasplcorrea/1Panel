@@ -32,7 +32,7 @@ func (b *BaseApi) DeleteWebDomain(c *gin.Context) {
 // @Summary Create website domain
 // @Accept json
 // @Param request body request.WebsiteDomainCreate true "request"
-// @Success 200 {object} model.WebsiteDomain
+// @Success 200 {array} model.WebsiteDomain
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /websites/domains [post]
@@ -57,7 +57,7 @@ func (b *BaseApi) CreateWebDomain(c *gin.Context) {
 // @Success 200 {array} model.WebsiteDomain
 // @Security ApiKeyAuth
 // @Security Timestamp
-// @Router /websites/domains/:websiteId [get]
+// @Router /websites/domains/{websiteId} [get]
 func (b *BaseApi) GetWebDomains(c *gin.Context) {
 	websiteId, err := helper.GetIntParamByKey(c, "websiteId")
 	if err != nil {

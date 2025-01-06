@@ -20,42 +20,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/apps/:key": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "App"
-                ],
-                "summary": "Search app by key",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "app key",
-                        "name": "key",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.AppDTO"
-                        }
-                    }
-                }
-            }
-        },
         "/apps/checkupdate": {
             "get": {
                 "security": [
@@ -72,12 +36,15 @@ const docTemplate = `{
                 "summary": "Get app list update",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.AppUpdateRes"
+                        }
                     }
                 }
             }
         },
-        "/apps/detail/:appId/:version/:type": {
+        "/apps/detail/{appId}/{version}/{type}": {
             "get": {
                 "security": [
                     {
@@ -112,7 +79,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "app type",
-                        "name": "version",
+                        "name": "type",
                         "in": "path",
                         "required": true
                     }
@@ -127,7 +94,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/apps/details/:id": {
+        "/apps/details/{id}": {
             "get": {
                 "security": [
                     {
@@ -148,7 +115,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "id",
-                        "name": "appId",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -313,7 +280,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/apps/installed/conninfo/:key": {
+        "/apps/installed/conninfo/{key}": {
             "get": {
                 "security": [
                     {
@@ -339,19 +306,26 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.OperationWithNameAndType"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.DatabaseConn"
                         }
                     }
                 }
             }
         },
-        "/apps/installed/delete/check/:appInstallId": {
+        "/apps/installed/delete/check/{appInstallId}": {
             "get": {
                 "security": [
                     {
@@ -572,42 +546,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/apps/installed/params/:appInstallId": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "App"
-                ],
-                "summary": "Search params by appInstallId",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "request",
-                        "name": "appInstallId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.AppParam"
-                        }
-                    }
-                }
-            }
-        },
         "/apps/installed/params/update": {
             "post": {
                 "security": [
@@ -649,6 +587,42 @@ const docTemplate = `{
                     "formatEN": "Application param update [installId]",
                     "formatZH": "应用参数修改 [installId]",
                     "paramKeys": []
+                }
+            }
+        },
+        "/apps/installed/params/{appInstallId}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "App"
+                ],
+                "summary": "Search params by appInstallId",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "request",
+                        "name": "appInstallId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.AppConfig"
+                        }
+                    }
                 }
             }
         },
@@ -728,7 +702,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.PageResult"
+                        }
                     }
                 }
             }
@@ -778,15 +755,6 @@ const docTemplate = `{
                     "App"
                 ],
                 "summary": "Search app update version by install id",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "request",
-                        "name": "appInstallId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -830,12 +798,15 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.AppRes"
+                        }
                     }
                 }
             }
         },
-        "/apps/services/:key": {
+        "/apps/services/{key}": {
             "get": {
                 "security": [
                     {
@@ -902,6 +873,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/apps/{key}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "App"
+                ],
+                "summary": "Search app by key",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "app key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.AppDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/captcha": {
             "get": {
                 "tags": [
@@ -926,7 +933,10 @@ const docTemplate = `{
                 "summary": "Check System isDemo",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
                     }
                 }
             }
@@ -939,7 +949,10 @@ const docTemplate = `{
                 "summary": "Check System isIntl",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
                     }
                 }
             }
@@ -952,7 +965,10 @@ const docTemplate = `{
                 "summary": "Load System Language",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -1196,7 +1212,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -1333,7 +1352,11 @@ const docTemplate = `{
                         "in": "query"
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         },
         "/containers/compose/test": {
@@ -1366,7 +1389,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -1664,7 +1690,11 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         },
         "/containers/image": {
@@ -2279,7 +2309,13 @@ const docTemplate = `{
                 "summary": "List containers",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             }
@@ -2338,7 +2374,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -3029,10 +3068,14 @@ const docTemplate = `{
                         "in": "query"
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         },
-        "/containers/stats/:id": {
+        "/containers/stats/{id}": {
             "get": {
                 "security": [
                     {
@@ -3821,7 +3864,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -4009,7 +4055,34 @@ const docTemplate = `{
                 }
             }
         },
-        "/dashboard/base/:ioOption/:netOption": {
+        "/dashboard/base/os": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Load os info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OsInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/base/{ioOption}/{netOption}": {
             "get": {
                 "security": [
                     {
@@ -4047,33 +4120,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.DashboardBase"
-                        }
-                    }
-                }
-            }
-        },
-        "/dashboard/base/os": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Dashboard"
-                ],
-                "summary": "Load os info",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.OsInfo"
                         }
                     }
                 }
@@ -4117,7 +4163,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/dashboard/system/restart/:operation": {
+        "/dashboard/system/restart/{operation}": {
             "post": {
                 "security": [
                     {
@@ -4413,7 +4459,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -4508,30 +4557,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/databases/db/:name": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "tags": [
-                    "Database"
-                ],
-                "summary": "Get databases",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.DatabaseInfo"
-                        }
-                    }
-                }
-            }
-        },
         "/databases/db/check": {
             "post": {
                 "security": [
@@ -4562,7 +4587,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -4630,7 +4658,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/databases/db/item/:type": {
+        "/databases/db/item/{type}": {
             "get": {
                 "security": [
                     {
@@ -4644,6 +4672,15 @@ const docTemplate = `{
                     "Database"
                 ],
                 "summary": "Retrieve database list based on type",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -4657,7 +4694,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/databases/db/list/:type": {
+        "/databases/db/list/{type}": {
             "get": {
                 "security": [
                     {
@@ -4671,6 +4708,15 @@ const docTemplate = `{
                     "Database"
                 ],
                 "summary": "List databases",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -4763,6 +4809,39 @@ const docTemplate = `{
                     "formatEN": "update database [name]",
                     "formatZH": "更新远程数据库 [name]",
                     "paramKeys": []
+                }
+            }
+        },
+        "/databases/db/{name}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "tags": [
+                    "Database"
+                ],
+                "summary": "Get databases",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.DatabaseInfo"
+                        }
+                    }
                 }
             }
         },
@@ -4942,7 +5021,11 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         },
         "/databases/options": {
@@ -5028,37 +5111,6 @@ const docTemplate = `{
                     "formatZH": "创建 postgresql 数据库 [name]",
                     "paramKeys": []
                 }
-            }
-        },
-        "/databases/pg/:database/load": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Database Postgresql"
-                ],
-                "summary": "Load postgresql database from remote",
-                "parameters": [
-                    {
-                        "description": "request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.PostgresqlLoadDB"
-                        }
-                    }
-                ],
-                "responses": {}
             }
         },
         "/databases/pg/bind": {
@@ -5386,6 +5438,48 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.PageResult"
                         }
+                    }
+                }
+            }
+        },
+        "/databases/pg/{database}/load": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Database Postgresql"
+                ],
+                "summary": "Load postgresql database from remote",
+                "parameters": [
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.PostgresqlLoadDB"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "database",
+                        "name": "database",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -6051,7 +6145,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
                     }
                 }
             }
@@ -6109,6 +6206,9 @@ const docTemplate = `{
                     {
                         "Timestamp": []
                     }
+                ],
+                "consumes": [
+                    "multipart/form-data"
                 ],
                 "tags": [
                     "File"
@@ -6363,7 +6463,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Favorite"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -6460,7 +6563,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.PageResult"
+                        }
                     }
                 }
             }
@@ -6628,7 +6734,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.FileLineContent"
+                        }
                     }
                 }
             }
@@ -6738,7 +6847,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.PageResult"
+                        }
                     }
                 }
             }
@@ -6762,7 +6874,10 @@ const docTemplate = `{
                 "summary": "Get Recycle Bin status",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -6924,7 +7039,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.DirSizeRes"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -6989,6 +7107,9 @@ const docTemplate = `{
                         "Timestamp": []
                     }
                 ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
                 "tags": [
                     "File"
                 ],
@@ -7050,10 +7171,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/response.FileInfo"
-                            }
+                            "$ref": "#/definitions/dto.PageResult"
                         }
                     }
                 }
@@ -7089,7 +7207,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.FileWgetRes"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -7355,7 +7476,10 @@ const docTemplate = `{
                 "summary": "Load host SSH conf",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -7468,7 +7592,11 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {},
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
                 "x-panel-log": {
                     "BeforeFunctions": [],
                     "bodyKeys": [
@@ -7534,7 +7662,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -7614,7 +7745,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.HostToolRes"
+                        }
                     }
                 }
             }
@@ -7649,7 +7783,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.HostToolConfig"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -7737,7 +7874,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -7806,7 +7946,10 @@ const docTemplate = `{
                 "summary": "Get Supervisor process config",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SupervisorProcessConfig"
+                        }
                     }
                 }
             },
@@ -7883,7 +8026,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -7927,7 +8073,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.HostInfo"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -8080,7 +8229,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "Array"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.RedisCommand"
+                            }
                         }
                     }
                 }
@@ -8279,7 +8431,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "Array"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.CommandTree"
+                            }
                         }
                     }
                 }
@@ -8560,10 +8715,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.PageResult"
-                        }
+                        "description": "OK"
                     }
                 },
                 "x-panel-log": {
@@ -8676,7 +8828,7 @@ const docTemplate = `{
                 "tags": [
                     "Firewall"
                 ],
-                "summary": "Uodate address group",
+                "summary": "Update address group",
                 "parameters": [
                     {
                         "description": "request",
@@ -8820,7 +8972,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.MonitorData"
+                            }
+                        }
                     }
                 }
             }
@@ -8857,16 +9015,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/dto.HostTree"
-                            }
+                            "$ref": "#/definitions/dto.PageResult"
                         }
                     }
                 }
             }
         },
-        "/hosts/test/byid/:id": {
+        "/hosts/test/byid/{id}": {
             "post": {
                 "security": [
                     {
@@ -8932,7 +9087,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
                     }
                 }
             }
@@ -9107,10 +9265,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.PageResult"
-                        }
+                        "description": "OK"
                     }
                 },
                 "x-panel-log": {
@@ -9216,7 +9371,10 @@ const docTemplate = `{
                 "summary": "Load system logs",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -9237,7 +9395,13 @@ const docTemplate = `{
                 "summary": "Load system log files",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             }
@@ -9260,7 +9424,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.FileInfo"
+                            "$ref": "#/definitions/response.NginxFile"
                         }
                     }
                 }
@@ -9525,7 +9689,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Runtime"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -9536,39 +9703,6 @@ const docTemplate = `{
                     "formatEN": "Create runtime [name]",
                     "formatZH": "创建运行环境 [name]",
                     "paramKeys": []
-                }
-            }
-        },
-        "/runtimes/:id": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Runtime"
-                ],
-                "summary": "Get runtime",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "request",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
                 }
             }
         },
@@ -9646,7 +9780,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.NodeModule"
+                            }
+                        }
                     }
                 }
             }
@@ -9716,7 +9856,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.PackageScripts"
+                            }
+                        }
                     }
                 }
             }
@@ -9941,7 +10087,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.PageResult"
+                        }
                     }
                 }
             }
@@ -10014,6 +10163,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/runtimes/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Runtime"
+                ],
+                "summary": "Get runtime",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "request",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.RuntimeDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/settings/api/config/generate/key": {
             "post": {
                 "security": [
@@ -10033,7 +10218,10 @@ const docTemplate = `{
                 "summary": "Generate api key",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -10342,7 +10530,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -10387,7 +10578,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.PageResult"
+                        }
                     }
                 }
             }
@@ -10422,7 +10616,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.PageResult"
+                        }
                     }
                 }
             }
@@ -10601,7 +10798,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "string"
+                                "type": "object"
                             }
                         }
                     }
@@ -10823,7 +11020,13 @@ const docTemplate = `{
                 "summary": "Load system address",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             }
@@ -11497,7 +11700,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.SnapshotFile"
+                            }
+                        }
                     }
                 }
             }
@@ -11532,7 +11741,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.SnapshotStatus"
+                        }
                     }
                 }
             }
@@ -11576,7 +11788,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.SettingInfo"
+                            "$ref": "#/definitions/dto.SSLInfo"
                         }
                     }
                 }
@@ -11701,7 +11913,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -11905,7 +12120,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.PageResult"
+                            "type": "string"
                         }
                     }
                 }
@@ -12027,7 +12242,11 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {},
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
                 "x-panel-log": {
                     "BeforeFunctions": [],
                     "bodyKeys": [
@@ -12067,7 +12286,11 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {},
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
                 "x-panel-log": {
                     "BeforeFunctions": [
                         {
@@ -12118,7 +12341,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -12397,7 +12623,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
                     }
                 }
             }
@@ -12432,7 +12661,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             }
@@ -12649,7 +12884,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "Array"
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -12698,7 +12936,10 @@ const docTemplate = `{
                 "summary": "Load fail2ban conf",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -12731,7 +12972,11 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {},
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
                 "x-panel-log": {
                     "BeforeFunctions": [],
                     "bodyKeys": [
@@ -12771,7 +13016,11 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         },
         "/toolbox/fail2ban/search": {
@@ -12806,7 +13055,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "Array"
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -13080,7 +13332,11 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {},
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
                 "x-panel-log": {
                     "BeforeFunctions": [],
                     "bodyKeys": [
@@ -13233,7 +13489,10 @@ const docTemplate = `{
                 "summary": "Scan system",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CleanData"
+                        }
                     }
                 },
                 "x-panel-log": {
@@ -13285,168 +13544,6 @@ const docTemplate = `{
                     ],
                     "formatEN": "Create website [primaryDomain]",
                     "formatZH": "创建网站 [primaryDomain]",
-                    "paramKeys": []
-                }
-            }
-        },
-        "/websites/:id": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Website"
-                ],
-                "summary": "Search website by id",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "request",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.WebsiteDTO"
-                        }
-                    }
-                }
-            }
-        },
-        "/websites/:id/config/:type": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Website Nginx"
-                ],
-                "summary": "Search website nginx by id",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "request",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.FileInfo"
-                        }
-                    }
-                }
-            }
-        },
-        "/websites/:id/https": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Website HTTPS"
-                ],
-                "summary": "Load https conf",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "request",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.WebsiteHTTPS"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Website HTTPS"
-                ],
-                "summary": "Update https conf",
-                "parameters": [
-                    {
-                        "description": "request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.WebsiteHTTPSOp"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.WebsiteHTTPS"
-                        }
-                    }
-                },
-                "x-panel-log": {
-                    "BeforeFunctions": [
-                        {
-                            "db": "websites",
-                            "input_column": "id",
-                            "input_value": "websiteId",
-                            "isList": false,
-                            "output_column": "primary_domain",
-                            "output_value": "domain"
-                        }
-                    ],
-                    "bodyKeys": [
-                        "websiteId"
-                    ],
-                    "formatEN": "Update website https [domain] conf",
-                    "formatZH": "更新网站 [domain] https 配置",
                     "paramKeys": []
                 }
             }
@@ -13619,7 +13716,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.NginxAuthRes"
+                        }
                     }
                 }
             }
@@ -14124,33 +14224,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/websites/default/html/:type": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Website"
-                ],
-                "summary": "Get default html",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.FileInfo"
-                        }
-                    }
-                }
-            }
-        },
         "/websites/default/html/update": {
             "post": {
                 "security": [
@@ -14192,6 +14265,42 @@ const docTemplate = `{
                     "formatEN": "Update default html",
                     "formatZH": "更新默认 html",
                     "paramKeys": []
+                }
+            }
+        },
+        "/websites/default/html/{type}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Website"
+                ],
+                "summary": "Get default html",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.WebsiteHtmlRes"
+                        }
+                    }
                 }
             }
         },
@@ -14332,7 +14441,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.WebsiteDirConfig"
+                        }
                     }
                 }
             }
@@ -14654,7 +14766,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.WebsiteDomain"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.WebsiteDomain"
+                            }
                         }
                     }
                 },
@@ -14666,45 +14781,6 @@ const docTemplate = `{
                     "formatEN": "Create domain [domain]",
                     "formatZH": "创建域名 [domain]",
                     "paramKeys": []
-                }
-            }
-        },
-        "/websites/domains/:websiteId": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Website Domain"
-                ],
-                "summary": "Search website domains by websiteId",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "request",
-                        "name": "websiteId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.WebsiteDomain"
-                            }
-                        }
-                    }
                 }
             }
         },
@@ -14761,6 +14837,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/websites/domains/{websiteId}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Website Domain"
+                ],
+                "summary": "Search website domains by websiteId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "request",
+                        "name": "websiteId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.WebsiteDomain"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/websites/leech": {
             "post": {
                 "security": [
@@ -14791,7 +14906,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.NginxAntiLeechRes"
+                        }
                     }
                 }
             }
@@ -15042,7 +15160,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "string"
+                                "$ref": "#/definitions/response.WebsiteOption"
                             }
                         }
                     }
@@ -15102,7 +15220,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/websites/php/config/:id": {
+        "/websites/php/config/{id}": {
             "get": {
                 "security": [
                     {
@@ -15274,7 +15392,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/request.WebsiteProxyConfig"
+                            }
+                        }
                     }
                 }
             }
@@ -15415,7 +15539,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.NginxRedirectConfig"
+                            }
+                        }
                     }
                 }
             }
@@ -15556,7 +15686,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.NginxRewriteRes"
+                        }
                     }
                 }
             }
@@ -15696,39 +15829,6 @@ const docTemplate = `{
                     "formatEN": "Create website ssl [primaryDomain]",
                     "formatZH": "创建网站 ssl [primaryDomain]",
                     "paramKeys": []
-                }
-            }
-        },
-        "/websites/ssl/:id": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    },
-                    {
-                        "Timestamp": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Website SSL"
-                ],
-                "summary": "Search website ssl by id",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "request",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
                 }
             }
         },
@@ -15962,7 +16062,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.WebsiteSSLDTO"
+                            }
+                        }
                     }
                 }
             }
@@ -16064,7 +16170,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/websites/ssl/website/:websiteId": {
+        "/websites/ssl/website/{websiteId}": {
             "get": {
                 "security": [
                     {
@@ -16092,7 +16198,46 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.WebsiteSSLDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/websites/ssl/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Website SSL"
+                ],
+                "summary": "Search website ssl by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "request",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.WebsiteSSLDTO"
+                        }
                     }
                 }
             }
@@ -16137,6 +16282,182 @@ const docTemplate = `{
                     ],
                     "formatEN": "Update website [primaryDomain]",
                     "formatZH": "更新网站 [primaryDomain]",
+                    "paramKeys": []
+                }
+            }
+        },
+        "/websites/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Website"
+                ],
+                "summary": "Search website by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "request",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.WebsiteDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/websites/{id}/config/{type}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Website Nginx"
+                ],
+                "summary": "Search website nginx by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "request",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "type",
+                        "name": "type",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.FileInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/websites/{id}/https": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Website HTTPS"
+                ],
+                "summary": "Load https conf",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "request",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.WebsiteHTTPS"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "Timestamp": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Website HTTPS"
+                ],
+                "summary": "Update https conf",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "request",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.WebsiteHTTPSOp"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.WebsiteHTTPS"
+                        }
+                    }
+                },
+                "x-panel-log": {
+                    "BeforeFunctions": [
+                        {
+                            "db": "websites",
+                            "input_column": "id",
+                            "input_value": "websiteId",
+                            "isList": false,
+                            "output_column": "primary_domain",
+                            "output_value": "domain"
+                        }
+                    ],
+                    "bodyKeys": [
+                        "websiteId"
+                    ],
+                    "formatEN": "Update website https [domain] conf",
+                    "formatZH": "更新网站 [domain] https 配置",
                     "paramKeys": []
                 }
             }
@@ -16193,8 +16514,55 @@ const docTemplate = `{
                 "apiKey": {
                     "type": "string"
                 },
+                "apiKeyValidityTime": {
+                    "type": "string"
+                },
                 "ipWhiteList": {
                     "type": "string"
+                }
+            }
+        },
+        "dto.AppConfigVersion": {
+            "type": "object",
+            "properties": {
+                "additionalProperties": {},
+                "downloadCallBackUrl": {
+                    "type": "string"
+                },
+                "downloadUrl": {
+                    "type": "string"
+                },
+                "lastModified": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.AppDefine": {
+            "type": "object",
+            "properties": {
+                "additionalProperties": {
+                    "$ref": "#/definitions/dto.AppProperty"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "lastModified": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "readMe": {
+                    "type": "string"
+                },
+                "versions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.AppConfigVersion"
+                    }
                 }
             }
         },
@@ -16208,6 +16576,85 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.AppList": {
+            "type": "object",
+            "properties": {
+                "additionalProperties": {
+                    "$ref": "#/definitions/dto.ExtraProperties"
+                },
+                "apps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.AppDefine"
+                    }
+                },
+                "lastModified": {
+                    "type": "integer"
+                },
+                "valid": {
+                    "type": "boolean"
+                },
+                "violations": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "dto.AppProperty": {
+            "type": "object",
+            "properties": {
+                "Required": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "crossVersionUpdate": {
+                    "type": "boolean"
+                },
+                "document": {
+                    "type": "string"
+                },
+                "github": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "recommend": {
+                    "type": "integer"
+                },
+                "shortDescEn": {
+                    "type": "string"
+                },
+                "shortDescZh": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "number"
+                },
+                "website": {
                     "type": "string"
                 }
             }
@@ -16665,6 +17112,41 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.CleanData": {
+            "type": "object",
+            "properties": {
+                "containerClean": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CleanTree"
+                    }
+                },
+                "downloadClean": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CleanTree"
+                    }
+                },
+                "systemClean": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CleanTree"
+                    }
+                },
+                "systemLogClean": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CleanTree"
+                    }
+                },
+                "uploadClean": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CleanTree"
+                    }
+                }
+            }
+        },
         "dto.CleanLog": {
             "type": "object",
             "required": [
@@ -16677,6 +17159,38 @@ const docTemplate = `{
                         "login",
                         "operation"
                     ]
+                }
+            }
+        },
+        "dto.CleanTree": {
+            "type": "object",
+            "properties": {
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CleanTree"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isCheck": {
+                    "type": "boolean"
+                },
+                "isRecommend": {
+                    "type": "boolean"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },
@@ -16720,6 +17234,23 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CommandTree": {
+            "type": "object",
+            "properties": {
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CommandInfo"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "label": {
                     "type": "string"
                 }
             }
@@ -18106,6 +18637,20 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.ExtraProperties": {
+            "type": "object",
+            "properties": {
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Tag"
+                    }
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.Fail2BanBaseInfo": {
             "type": "object",
             "properties": {
@@ -18170,8 +18715,7 @@ const docTemplate = `{
                         "findtime",
                         "maxretry",
                         "banaction",
-                        "logpath",
-                        "port"
+                        "logpath"
                     ]
                 },
                 "value": {
@@ -18552,6 +19096,53 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.HostInfo": {
+            "type": "object",
+            "properties": {
+                "addr": {
+                    "type": "string"
+                },
+                "authMode": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "groupBelong": {
+                    "type": "string"
+                },
+                "groupID": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "passPhrase": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "privateKey": {
+                    "type": "string"
+                },
+                "rememberPassword": {
+                    "type": "boolean"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.HostOperate": {
             "type": "object",
             "required": [
@@ -18856,7 +19447,8 @@ const docTemplate = `{
                     "enum": [
                         "zh",
                         "en",
-                        "tw"
+                        "tw",
+                        "ru"
                     ]
                 },
                 "name": {
@@ -18905,6 +19497,34 @@ const docTemplate = `{
                 },
                 "secret": {
                     "type": "string"
+                }
+            }
+        },
+        "dto.MonitorData": {
+            "type": "object",
+            "required": [
+                "param"
+            ],
+            "properties": {
+                "date": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "param": {
+                    "type": "string",
+                    "enum": [
+                        "cpu",
+                        "memory",
+                        "load",
+                        "io",
+                        "network"
+                    ]
+                },
+                "value": {
+                    "type": "array",
+                    "items": {}
                 }
             }
         },
@@ -19384,6 +20004,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "subnetV6": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.NginxAuth": {
+            "type": "object",
+            "properties": {
+                "remark": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
@@ -20308,6 +20939,29 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.SSLInfo": {
+            "type": "object",
+            "properties": {
+                "cert": {
+                    "type": "string"
+                },
+                "domain": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "rootPath": {
+                    "type": "string"
+                },
+                "sslID": {
+                    "type": "integer"
+                },
+                "timeout": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.SSLUpdate": {
             "type": "object",
             "required": [
@@ -20543,6 +21197,9 @@ const docTemplate = `{
                 "apiKey": {
                     "type": "string"
                 },
+                "apiKeyValidityTime": {
+                    "type": "string"
+                },
                 "appStoreLastModified": {
                     "type": "string"
                 },
@@ -20763,6 +21420,20 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.SnapshotFile": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.SnapshotImport": {
             "type": "object",
             "properties": {
@@ -20801,6 +21472,38 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.SnapshotStatus": {
+            "type": "object",
+            "properties": {
+                "appData": {
+                    "type": "string"
+                },
+                "backupData": {
+                    "type": "string"
+                },
+                "compress": {
+                    "type": "string"
+                },
+                "daemonJson": {
+                    "type": "string"
+                },
+                "panel": {
+                    "type": "string"
+                },
+                "panelData": {
+                    "type": "string"
+                },
+                "panelInfo": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "upload": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.SwapHelper": {
             "type": "object",
             "required": [
@@ -20818,6 +21521,20 @@ const docTemplate = `{
                 },
                 "used": {
                     "type": "string"
+                }
+            }
+        },
+        "dto.Tag": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
                 }
             }
         },
@@ -21219,6 +21936,91 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "version": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Favorite": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isDir": {
+                    "type": "boolean"
+                },
+                "isTxt": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Runtime": {
+            "type": "object",
+            "properties": {
+                "appDetailId": {
+                    "type": "integer"
+                },
+                "codeDir": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "dockerCompose": {
+                    "type": "string"
+                },
+                "env": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "params": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "resource": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "workDir": {
                     "type": "string"
                 }
             }
@@ -23857,6 +24659,47 @@ const docTemplate = `{
                 }
             }
         },
+        "response.AppConfig": {
+            "type": "object",
+            "properties": {
+                "advanced": {
+                    "type": "boolean"
+                },
+                "allowPort": {
+                    "type": "boolean"
+                },
+                "containerName": {
+                    "type": "string"
+                },
+                "cpuQuota": {
+                    "type": "number"
+                },
+                "dockerCompose": {
+                    "type": "string"
+                },
+                "editCompose": {
+                    "type": "boolean"
+                },
+                "hostMode": {
+                    "type": "boolean"
+                },
+                "memoryLimit": {
+                    "type": "number"
+                },
+                "memoryUnit": {
+                    "type": "string"
+                },
+                "params": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.AppParam"
+                    }
+                },
+                "pullImage": {
+                    "type": "boolean"
+                }
+            }
+        },
         "response.AppDTO": {
             "type": "object",
             "properties": {
@@ -23991,6 +24834,56 @@ const docTemplate = `{
                 }
             }
         },
+        "response.AppDto": {
+            "type": "object",
+            "properties": {
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "installed": {
+                    "type": "boolean"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "resource": {
+                    "type": "string"
+                },
+                "shortDescEn": {
+                    "type": "string"
+                },
+                "shortDescZh": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Tag"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                },
+                "versions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "response.AppInstalledCheck": {
             "type": "object",
             "properties": {
@@ -24066,6 +24959,20 @@ const docTemplate = `{
                 "values": {}
             }
         },
+        "response.AppRes": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.AppDto"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "response.AppService": {
             "type": "object",
             "properties": {
@@ -24078,6 +24985,57 @@ const docTemplate = `{
                 },
                 "value": {
                     "type": "string"
+                }
+            }
+        },
+        "response.AppUpdateRes": {
+            "type": "object",
+            "properties": {
+                "appList": {
+                    "$ref": "#/definitions/dto.AppList"
+                },
+                "appStoreLastModified": {
+                    "type": "integer"
+                },
+                "canUpdate": {
+                    "type": "boolean"
+                },
+                "isSyncing": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "response.DatabaseConn": {
+            "type": "object",
+            "properties": {
+                "containerName": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "serviceName": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.DirSizeRes": {
+            "type": "object",
+            "required": [
+                "size"
+            ],
+            "properties": {
+                "size": {
+                    "type": "number"
                 }
             }
         },
@@ -24155,6 +25113,29 @@ const docTemplate = `{
                 }
             }
         },
+        "response.FileLineContent": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "end": {
+                    "type": "boolean"
+                },
+                "lines": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "path": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "response.FileTree": {
             "type": "object",
             "properties": {
@@ -24181,6 +25162,31 @@ const docTemplate = `{
                 }
             }
         },
+        "response.FileWgetRes": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.HostToolConfig": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.HostToolRes": {
+            "type": "object",
+            "properties": {
+                "config": {},
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
         "response.IgnoredApp": {
             "type": "object",
             "properties": {
@@ -24198,6 +25204,66 @@ const docTemplate = `{
                 }
             }
         },
+        "response.NginxAntiLeechRes": {
+            "type": "object",
+            "properties": {
+                "blocked": {
+                    "type": "boolean"
+                },
+                "cache": {
+                    "type": "boolean"
+                },
+                "cacheTime": {
+                    "type": "integer"
+                },
+                "cacheUint": {
+                    "type": "string"
+                },
+                "enable": {
+                    "type": "boolean"
+                },
+                "extends": {
+                    "type": "string"
+                },
+                "logEnable": {
+                    "type": "boolean"
+                },
+                "noneRef": {
+                    "type": "boolean"
+                },
+                "return": {
+                    "type": "string"
+                },
+                "serverNames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "response.NginxAuthRes": {
+            "type": "object",
+            "properties": {
+                "enable": {
+                    "type": "boolean"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.NginxAuth"
+                    }
+                }
+            }
+        },
+        "response.NginxFile": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
         "response.NginxParam": {
             "type": "object",
             "properties": {
@@ -24209,6 +25275,58 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "response.NginxRedirectConfig": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "domains": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "enable": {
+                    "type": "boolean"
+                },
+                "filePath": {
+                    "type": "string"
+                },
+                "keepPath": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "redirect": {
+                    "type": "string"
+                },
+                "redirectRoot": {
+                    "type": "boolean"
+                },
+                "target": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "websiteID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.NginxRewriteRes": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
                 }
             }
         },
@@ -24234,6 +25352,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "writing": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.NodeModule": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "license": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "version": {
                     "type": "string"
                 }
             }
@@ -24274,6 +25409,132 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.PackageScripts": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "script": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.ProcessStatus": {
+            "type": "object",
+            "properties": {
+                "PID": {
+                    "type": "string"
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "uptime": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.RuntimeDTO": {
+            "type": "object",
+            "properties": {
+                "appDetailID": {
+                    "type": "integer"
+                },
+                "appID": {
+                    "type": "integer"
+                },
+                "appParams": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.AppParam"
+                    }
+                },
+                "codeDir": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "exposedPorts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.ExposedPort"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "params": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "path": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "resource": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.SupervisorProcessConfig": {
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string"
+                },
+                "dir": {
+                    "type": "string"
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "numprocs": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.ProcessStatus"
+                    }
+                },
+                "user": {
                     "type": "string"
                 }
             }
@@ -24478,6 +25739,26 @@ const docTemplate = `{
                 }
             }
         },
+        "response.WebsiteDirConfig": {
+            "type": "object",
+            "properties": {
+                "dirs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                },
+                "userGroup": {
+                    "type": "string"
+                }
+            }
+        },
         "response.WebsiteHTTPS": {
             "type": "object",
             "properties": {
@@ -24500,6 +25781,14 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "httpConfig": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.WebsiteHtmlRes": {
+            "type": "object",
+            "properties": {
+                "content": {
                     "type": "string"
                 }
             }
@@ -24535,6 +25824,20 @@ const docTemplate = `{
                 }
             }
         },
+        "response.WebsiteOption": {
+            "type": "object",
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "primaryDomain": {
+                    "type": "string"
+                }
+            }
+        },
         "response.WebsitePreInstallCheck": {
             "type": "object",
             "properties": {
@@ -24551,6 +25854,113 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "response.WebsiteSSLDTO": {
+            "type": "object",
+            "properties": {
+                "acmeAccount": {
+                    "$ref": "#/definitions/model.WebsiteAcmeAccount"
+                },
+                "acmeAccountId": {
+                    "type": "integer"
+                },
+                "autoRenew": {
+                    "type": "boolean"
+                },
+                "caId": {
+                    "type": "integer"
+                },
+                "certURL": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "dir": {
+                    "type": "string"
+                },
+                "disableCNAME": {
+                    "type": "boolean"
+                },
+                "dnsAccount": {
+                    "$ref": "#/definitions/model.WebsiteDnsAccount"
+                },
+                "dnsAccountId": {
+                    "type": "integer"
+                },
+                "domains": {
+                    "type": "string"
+                },
+                "execShell": {
+                    "type": "boolean"
+                },
+                "expireDate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "keyType": {
+                    "type": "string"
+                },
+                "logPath": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "nameserver1": {
+                    "type": "string"
+                },
+                "nameserver2": {
+                    "type": "string"
+                },
+                "organization": {
+                    "type": "string"
+                },
+                "pem": {
+                    "type": "string"
+                },
+                "primaryDomain": {
+                    "type": "string"
+                },
+                "privateKey": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "pushDir": {
+                    "type": "boolean"
+                },
+                "shell": {
+                    "type": "string"
+                },
+                "skipDNS": {
+                    "type": "boolean"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "websites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Website"
+                    }
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -24558,7 +25968,7 @@ const docTemplate = `{
             "description": "Custom Token Format, Format: md5('1panel' + API-Key + UnixTimestamp).\n` + "`" + `` + "`" + `` + "`" + `\neg:\ncurl -X GET \"http://localhost:4004/api/v1/resource\" \\\n-H \"1Panel-Token: \u003c1panel_token\u003e\" \\\n-H \"1Panel-Timestamp: \u003ccurrent_unix_timestamp\u003e\"\n` + "`" + `` + "`" + `` + "`" + `\n- ` + "`" + `1Panel-Token` + "`" + ` is the key for the panel API Key.",
             "type": "apiKey",
             "name": "1Panel-Token",
-            "in": "Header"
+            "in": "header"
         },
         "Timestamp": {
             "description": "- ` + "`" + `1Panel-Timestamp` + "`" + ` is the Unix timestamp of the current time in seconds.",

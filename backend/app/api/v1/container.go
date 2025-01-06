@@ -1,13 +1,14 @@
 package v1
 
 import (
+	"strconv"
+
 	"github.com/1Panel-dev/1Panel/backend/app/api/v1/helper"
 	"github.com/1Panel-dev/1Panel/backend/app/dto"
 	"github.com/1Panel-dev/1Panel/backend/constant"
 	"github.com/1Panel-dev/1Panel/backend/global"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"strconv"
 )
 
 // @Tags Container
@@ -40,7 +41,7 @@ func (b *BaseApi) SearchContainer(c *gin.Context) {
 // @Summary List containers
 // @Accept json
 // @Produce json
-// @Success 200
+// @Success 200 {array} string
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /containers/list [post]
@@ -82,7 +83,7 @@ func (b *BaseApi) SearchCompose(c *gin.Context) {
 // @Summary Test compose
 // @Accept json
 // @Param request body dto.ComposeCreate true "request"
-// @Success 200
+// @Success 200 {boolean} isOK
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /containers/compose/test [post]
@@ -105,7 +106,7 @@ func (b *BaseApi) TestCompose(c *gin.Context) {
 // @Summary Create compose
 // @Accept json
 // @Param request body dto.ComposeCreate true "request"
-// @Success 200
+// @Success 200 {string} log
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /containers/compose [post]
@@ -311,7 +312,7 @@ func (b *BaseApi) CleanContainerLog(c *gin.Context) {
 // @Summary Load container log
 // @Accept json
 // @Param request body dto.OperationWithNameAndType true "request"
-// @Success 200
+// @Success 200 {string} content
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /containers/load/log [post]
@@ -394,7 +395,7 @@ func (b *BaseApi) ContainerOperation(c *gin.Context) {
 // @Success 200 {object} dto.ContainerStats
 // @Security ApiKeyAuth
 // @Security Timestamp
-// @Router /containers/stats/:id [get]
+// @Router /containers/stats/{id} [get]
 func (b *BaseApi) ContainerStats(c *gin.Context) {
 	containerID, ok := c.Params.Get("id")
 	if !ok {
@@ -438,6 +439,7 @@ func (b *BaseApi) Inspect(c *gin.Context) {
 // @Param since query string false "since"
 // @Param follow query string false "follow"
 // @Param tail query string false "tail"
+// @Success 200
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /containers/search/log [post]
@@ -464,6 +466,7 @@ func (b *BaseApi) ContainerLogs(c *gin.Context) {
 // @Summary Download Container logs
 // @Accept json
 // @Param request body dto.ContainerLog true "request"
+// @Success 200
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /containers/download/log [post]
@@ -680,6 +683,7 @@ func (b *BaseApi) ComposeUpdate(c *gin.Context) {
 // @Param since query string false "date"
 // @Param follow query string false "follow"
 // @Param tail query string false "tail"
+// @Success 200
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /containers/compose/search/log [get]

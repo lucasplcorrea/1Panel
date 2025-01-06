@@ -34,8 +34,39 @@ definitions:
         type: string
       apiKey:
         type: string
+      apiKeyValidityTime:
+        type: string
       ipWhiteList:
         type: string
+    type: object
+  dto.AppConfigVersion:
+    properties:
+      additionalProperties: {}
+      downloadCallBackUrl:
+        type: string
+      downloadUrl:
+        type: string
+      lastModified:
+        type: integer
+      name:
+        type: string
+    type: object
+  dto.AppDefine:
+    properties:
+      additionalProperties:
+        $ref: '#/definitions/dto.AppProperty'
+      icon:
+        type: string
+      lastModified:
+        type: integer
+      name:
+        type: string
+      readMe:
+        type: string
+      versions:
+        items:
+          $ref: '#/definitions/dto.AppConfigVersion'
+        type: array
     type: object
   dto.AppInstallInfo:
     properties:
@@ -44,6 +75,58 @@ definitions:
       key:
         type: string
       name:
+        type: string
+    type: object
+  dto.AppList:
+    properties:
+      additionalProperties:
+        $ref: '#/definitions/dto.ExtraProperties'
+      apps:
+        items:
+          $ref: '#/definitions/dto.AppDefine'
+        type: array
+      lastModified:
+        type: integer
+      valid:
+        type: boolean
+      violations:
+        items:
+          type: string
+        type: array
+    type: object
+  dto.AppProperty:
+    properties:
+      Required:
+        items:
+          type: string
+        type: array
+      crossVersionUpdate:
+        type: boolean
+      document:
+        type: string
+      github:
+        type: string
+      key:
+        type: string
+      limit:
+        type: integer
+      name:
+        type: string
+      recommend:
+        type: integer
+      shortDescEn:
+        type: string
+      shortDescZh:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      type:
+        type: string
+      version:
+        type: number
+      website:
         type: string
     type: object
   dto.AppResource:
@@ -345,6 +428,29 @@ definitions:
       treeType:
         type: string
     type: object
+  dto.CleanData:
+    properties:
+      containerClean:
+        items:
+          $ref: '#/definitions/dto.CleanTree'
+        type: array
+      downloadClean:
+        items:
+          $ref: '#/definitions/dto.CleanTree'
+        type: array
+      systemClean:
+        items:
+          $ref: '#/definitions/dto.CleanTree'
+        type: array
+      systemLogClean:
+        items:
+          $ref: '#/definitions/dto.CleanTree'
+        type: array
+      uploadClean:
+        items:
+          $ref: '#/definitions/dto.CleanTree'
+        type: array
+    type: object
   dto.CleanLog:
     properties:
       logType:
@@ -354,6 +460,27 @@ definitions:
         type: string
     required:
     - logType
+    type: object
+  dto.CleanTree:
+    properties:
+      children:
+        items:
+          $ref: '#/definitions/dto.CleanTree'
+        type: array
+      id:
+        type: string
+      isCheck:
+        type: boolean
+      isRecommend:
+        type: boolean
+      label:
+        type: string
+      name:
+        type: string
+      size:
+        type: integer
+      type:
+        type: string
     type: object
   dto.CommandInfo:
     properties:
@@ -383,6 +510,17 @@ definitions:
     required:
     - command
     - name
+    type: object
+  dto.CommandTree:
+    properties:
+      children:
+        items:
+          $ref: '#/definitions/dto.CommandInfo'
+        type: array
+      id:
+        type: integer
+      label:
+        type: string
     type: object
   dto.CommonBackup:
     properties:
@@ -1319,6 +1457,15 @@ definitions:
     - fileName
     - source
     type: object
+  dto.ExtraProperties:
+    properties:
+      tags:
+        items:
+          $ref: '#/definitions/dto.Tag'
+        type: array
+      version:
+        type: string
+    type: object
   dto.Fail2BanBaseInfo:
     properties:
       banAction:
@@ -1362,7 +1509,6 @@ definitions:
         - maxretry
         - banaction
         - logpath
-        - port
         type: string
       value:
         type: string
@@ -1621,6 +1767,37 @@ definitions:
       ip:
         type: string
     type: object
+  dto.HostInfo:
+    properties:
+      addr:
+        type: string
+      authMode:
+        type: string
+      createdAt:
+        type: string
+      description:
+        type: string
+      groupBelong:
+        type: string
+      groupID:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      passPhrase:
+        type: string
+      password:
+        type: string
+      port:
+        type: integer
+      privateKey:
+        type: string
+      rememberPassword:
+        type: boolean
+      user:
+        type: string
+    type: object
   dto.HostOperate:
     properties:
       addr:
@@ -1822,6 +1999,7 @@ definitions:
         - zh
         - en
         - tw
+        - ru
         type: string
       name:
         type: string
@@ -1860,6 +2038,26 @@ definitions:
     - code
     - interval
     - secret
+    type: object
+  dto.MonitorData:
+    properties:
+      date:
+        items:
+          type: string
+        type: array
+      param:
+        enum:
+        - cpu
+        - memory
+        - load
+        - io
+        - network
+        type: string
+      value:
+        items: {}
+        type: array
+    required:
+    - param
     type: object
   dto.MonitorSearch:
     properties:
@@ -2188,6 +2386,13 @@ definitions:
     required:
     - driver
     - name
+    type: object
+  dto.NginxAuth:
+    properties:
+      remark:
+        type: string
+      username:
+        type: string
     type: object
   dto.NginxKey:
     enum:
@@ -2816,6 +3021,21 @@ definitions:
     required:
     - key
     type: object
+  dto.SSLInfo:
+    properties:
+      cert:
+        type: string
+      domain:
+        type: string
+      key:
+        type: string
+      rootPath:
+        type: string
+      sslID:
+        type: integer
+      timeout:
+        type: string
+    type: object
   dto.SSLUpdate:
     properties:
       autoRestart:
@@ -2977,6 +3197,8 @@ definitions:
         type: string
       apiKey:
         type: string
+      apiKeyValidityTime:
+        type: string
       appStoreLastModified:
         type: string
       appStoreSyncStatus:
@@ -3123,6 +3345,15 @@ definitions:
     - defaultDownload
     - from
     type: object
+  dto.SnapshotFile:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      size:
+        type: integer
+    type: object
   dto.SnapshotImport:
     properties:
       description:
@@ -3148,6 +3379,27 @@ definitions:
     required:
     - id
     type: object
+  dto.SnapshotStatus:
+    properties:
+      appData:
+        type: string
+      backupData:
+        type: string
+      compress:
+        type: string
+      daemonJson:
+        type: string
+      panel:
+        type: string
+      panelData:
+        type: string
+      panelInfo:
+        type: string
+      size:
+        type: string
+      upload:
+        type: string
+    type: object
   dto.SwapHelper:
     properties:
       isNew:
@@ -3160,6 +3412,15 @@ definitions:
         type: string
     required:
     - path
+    type: object
+  dto.Tag:
+    properties:
+      key:
+        type: string
+      name:
+        type: string
+      sort:
+        type: integer
     type: object
   dto.TreeChild:
     properties:
@@ -3423,6 +3684,62 @@ definitions:
       updatedAt:
         type: string
       version:
+        type: string
+    type: object
+  model.Favorite:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      isDir:
+        type: boolean
+      isTxt:
+        type: boolean
+      name:
+        type: string
+      path:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.Runtime:
+    properties:
+      appDetailId:
+        type: integer
+      codeDir:
+        type: string
+      createdAt:
+        type: string
+      dockerCompose:
+        type: string
+      env:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      message:
+        type: string
+      name:
+        type: string
+      params:
+        type: string
+      port:
+        type: integer
+      resource:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+      version:
+        type: string
+      workDir:
         type: string
     type: object
   model.Tag:
@@ -5194,6 +5511,33 @@ definitions:
     - id
     - user
     type: object
+  response.AppConfig:
+    properties:
+      advanced:
+        type: boolean
+      allowPort:
+        type: boolean
+      containerName:
+        type: string
+      cpuQuota:
+        type: number
+      dockerCompose:
+        type: string
+      editCompose:
+        type: boolean
+      hostMode:
+        type: boolean
+      memoryLimit:
+        type: number
+      memoryUnit:
+        type: string
+      params:
+        items:
+          $ref: '#/definitions/response.AppParam'
+        type: array
+      pullImage:
+        type: boolean
+    type: object
   response.AppDTO:
     properties:
       createdAt:
@@ -5283,6 +5627,39 @@ definitions:
       version:
         type: string
     type: object
+  response.AppDto:
+    properties:
+      icon:
+        type: string
+      id:
+        type: integer
+      installed:
+        type: boolean
+      key:
+        type: string
+      limit:
+        type: integer
+      name:
+        type: string
+      resource:
+        type: string
+      shortDescEn:
+        type: string
+      shortDescZh:
+        type: string
+      status:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/model.Tag'
+        type: array
+      type:
+        type: string
+      versions:
+        items:
+          type: string
+        type: array
+    type: object
   response.AppInstalledCheck:
     properties:
       app:
@@ -5333,6 +5710,15 @@ definitions:
       value: {}
       values: {}
     type: object
+  response.AppRes:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/response.AppDto'
+        type: array
+      total:
+        type: integer
+    type: object
   response.AppService:
     properties:
       config: {}
@@ -5342,6 +5728,39 @@ definitions:
         type: string
       value:
         type: string
+    type: object
+  response.AppUpdateRes:
+    properties:
+      appList:
+        $ref: '#/definitions/dto.AppList'
+      appStoreLastModified:
+        type: integer
+      canUpdate:
+        type: boolean
+      isSyncing:
+        type: boolean
+    type: object
+  response.DatabaseConn:
+    properties:
+      containerName:
+        type: string
+      password:
+        type: string
+      port:
+        type: integer
+      serviceName:
+        type: string
+      status:
+        type: string
+      username:
+        type: string
+    type: object
+  response.DirSizeRes:
+    properties:
+      size:
+        type: number
+    required:
+    - size
     type: object
   response.FileInfo:
     properties:
@@ -5392,6 +5811,21 @@ definitions:
       user:
         type: string
     type: object
+  response.FileLineContent:
+    properties:
+      content:
+        type: string
+      end:
+        type: boolean
+      lines:
+        items:
+          type: string
+        type: array
+      path:
+        type: string
+      total:
+        type: integer
+    type: object
   response.FileTree:
     properties:
       children:
@@ -5409,6 +5843,22 @@ definitions:
       path:
         type: string
     type: object
+  response.FileWgetRes:
+    properties:
+      key:
+        type: string
+    type: object
+  response.HostToolConfig:
+    properties:
+      content:
+        type: string
+    type: object
+  response.HostToolRes:
+    properties:
+      config: {}
+      type:
+        type: string
+    type: object
   response.IgnoredApp:
     properties:
       detailID:
@@ -5420,6 +5870,45 @@ definitions:
       version:
         type: string
     type: object
+  response.NginxAntiLeechRes:
+    properties:
+      blocked:
+        type: boolean
+      cache:
+        type: boolean
+      cacheTime:
+        type: integer
+      cacheUint:
+        type: string
+      enable:
+        type: boolean
+      extends:
+        type: string
+      logEnable:
+        type: boolean
+      noneRef:
+        type: boolean
+      return:
+        type: string
+      serverNames:
+        items:
+          type: string
+        type: array
+    type: object
+  response.NginxAuthRes:
+    properties:
+      enable:
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/dto.NginxAuth'
+        type: array
+    type: object
+  response.NginxFile:
+    properties:
+      content:
+        type: string
+    type: object
   response.NginxParam:
     properties:
       name:
@@ -5428,6 +5917,40 @@ definitions:
         items:
           type: string
         type: array
+    type: object
+  response.NginxRedirectConfig:
+    properties:
+      content:
+        type: string
+      domains:
+        items:
+          type: string
+        type: array
+      enable:
+        type: boolean
+      filePath:
+        type: string
+      keepPath:
+        type: boolean
+      name:
+        type: string
+      path:
+        type: string
+      redirect:
+        type: string
+      redirectRoot:
+        type: boolean
+      target:
+        type: string
+      type:
+        type: string
+      websiteID:
+        type: integer
+    type: object
+  response.NginxRewriteRes:
+    properties:
+      content:
+        type: string
     type: object
   response.NginxStatus:
     properties:
@@ -5444,6 +5967,17 @@ definitions:
       waiting:
         type: string
       writing:
+        type: string
+    type: object
+  response.NodeModule:
+    properties:
+      description:
+        type: string
+      license:
+        type: string
+      name:
+        type: string
+      version:
         type: string
     type: object
   response.PHPConfig:
@@ -5470,6 +6004,89 @@ definitions:
       name:
         type: string
       updatedAt:
+        type: string
+    type: object
+  response.PackageScripts:
+    properties:
+      name:
+        type: string
+      script:
+        type: string
+    type: object
+  response.ProcessStatus:
+    properties:
+      PID:
+        type: string
+      msg:
+        type: string
+      name:
+        type: string
+      status:
+        type: string
+      uptime:
+        type: string
+    type: object
+  response.RuntimeDTO:
+    properties:
+      appDetailID:
+        type: integer
+      appID:
+        type: integer
+      appParams:
+        items:
+          $ref: '#/definitions/response.AppParam'
+        type: array
+      codeDir:
+        type: string
+      createdAt:
+        type: string
+      exposedPorts:
+        items:
+          $ref: '#/definitions/request.ExposedPort'
+        type: array
+      id:
+        type: integer
+      image:
+        type: string
+      message:
+        type: string
+      name:
+        type: string
+      params:
+        additionalProperties: true
+        type: object
+      path:
+        type: string
+      port:
+        type: integer
+      resource:
+        type: string
+      source:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+      version:
+        type: string
+    type: object
+  response.SupervisorProcessConfig:
+    properties:
+      command:
+        type: string
+      dir:
+        type: string
+      msg:
+        type: string
+      name:
+        type: string
+      numprocs:
+        type: string
+      status:
+        items:
+          $ref: '#/definitions/response.ProcessStatus'
+        type: array
+      user:
         type: string
     type: object
   response.WebsiteAcmeAccountDTO:
@@ -5604,6 +6221,19 @@ definitions:
       webSiteSSLId:
         type: integer
     type: object
+  response.WebsiteDirConfig:
+    properties:
+      dirs:
+        items:
+          type: string
+        type: array
+      msg:
+        type: string
+      user:
+        type: string
+      userGroup:
+        type: string
+    type: object
   response.WebsiteHTTPS:
     properties:
       SSL:
@@ -5619,6 +6249,11 @@ definitions:
       hsts:
         type: boolean
       httpConfig:
+        type: string
+    type: object
+  response.WebsiteHtmlRes:
+    properties:
+      content:
         type: string
     type: object
   response.WebsiteLog:
@@ -5641,6 +6276,15 @@ definitions:
           $ref: '#/definitions/response.NginxParam'
         type: array
     type: object
+  response.WebsiteOption:
+    properties:
+      alias:
+        type: string
+      id:
+        type: integer
+      primaryDomain:
+        type: string
+    type: object
   response.WebsitePreInstallCheck:
     properties:
       appName:
@@ -5652,6 +6296,77 @@ definitions:
       version:
         type: string
     type: object
+  response.WebsiteSSLDTO:
+    properties:
+      acmeAccount:
+        $ref: '#/definitions/model.WebsiteAcmeAccount'
+      acmeAccountId:
+        type: integer
+      autoRenew:
+        type: boolean
+      caId:
+        type: integer
+      certURL:
+        type: string
+      createdAt:
+        type: string
+      description:
+        type: string
+      dir:
+        type: string
+      disableCNAME:
+        type: boolean
+      dnsAccount:
+        $ref: '#/definitions/model.WebsiteDnsAccount'
+      dnsAccountId:
+        type: integer
+      domains:
+        type: string
+      execShell:
+        type: boolean
+      expireDate:
+        type: string
+      id:
+        type: integer
+      keyType:
+        type: string
+      logPath:
+        type: string
+      message:
+        type: string
+      nameserver1:
+        type: string
+      nameserver2:
+        type: string
+      organization:
+        type: string
+      pem:
+        type: string
+      primaryDomain:
+        type: string
+      privateKey:
+        type: string
+      provider:
+        type: string
+      pushDir:
+        type: boolean
+      shell:
+        type: string
+      skipDNS:
+        type: boolean
+      startDate:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+      websites:
+        items:
+          $ref: '#/definitions/model.Website'
+        type: array
+    type: object
 info:
   contact: {}
   description: Top-Rated Web-based Linux Server Management Tool
@@ -5662,7 +6377,7 @@ info:
   title: 1Panel
   version: "1.0"
 paths:
-  /apps/:key:
+  /apps/{key}:
     get:
       consumes:
       - application/json
@@ -5688,13 +6403,15 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.AppUpdateRes'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
       summary: Get app list update
       tags:
       - App
-  /apps/detail/:appId/:version/:type:
+  /apps/detail/{appId}/{version}/{type}:
     get:
       consumes:
       - application/json
@@ -5711,7 +6428,7 @@ paths:
         type: string
       - description: app type
         in: path
-        name: version
+        name: type
         required: true
         type: string
       responses:
@@ -5725,14 +6442,14 @@ paths:
       summary: Search app detail by appid
       tags:
       - App
-  /apps/details/:id:
+  /apps/details/{id}:
     get:
       consumes:
       - application/json
       parameters:
       - description: id
         in: path
-        name: appId
+        name: id
         required: true
         type: integer
       responses:
@@ -5834,7 +6551,7 @@ paths:
       summary: Search default config by key
       tags:
       - App
-  /apps/installed/conninfo/:key:
+  /apps/installed/conninfo/{key}:
     get:
       consumes:
       - application/json
@@ -5845,18 +6562,23 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.OperationWithNameAndType'
+      - description: key
+        in: path
+        name: key
+        required: true
+        type: string
       responses:
         "200":
           description: OK
           schema:
-            type: string
+            $ref: '#/definitions/response.DatabaseConn'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
       summary: Search app password by key
       tags:
       - App
-  /apps/installed/delete/check/:appInstallId:
+  /apps/installed/delete/check/{appInstallId}:
     get:
       consumes:
       - application/json
@@ -5991,7 +6713,7 @@ paths:
         formatEN: '[operate] App [appKey][appName]'
         formatZH: '[operate] 应用 [appKey][appName]'
         paramKeys: []
-  /apps/installed/params/:appInstallId:
+  /apps/installed/params/{appInstallId}:
     get:
       consumes:
       - application/json
@@ -6005,7 +6727,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.AppParam'
+            $ref: '#/definitions/response.AppConfig'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -6082,6 +6804,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/dto.PageResult'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -6109,12 +6833,6 @@ paths:
     post:
       consumes:
       - application/json
-      parameters:
-      - description: request
-        in: path
-        name: appInstallId
-        required: true
-        type: integer
       responses:
         "200":
           description: OK
@@ -6142,13 +6860,15 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.AppRes'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
       summary: List apps
       tags:
       - App
-  /apps/services/:key:
+  /apps/services/{key}:
     get:
       consumes:
       - application/json
@@ -6203,6 +6923,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: boolean
       summary: Check System isDemo
       tags:
       - Auth
@@ -6211,6 +6933,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: boolean
       summary: Check System isIntl
       tags:
       - Auth
@@ -6219,6 +6943,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       summary: Load System Language
       tags:
       - Auth
@@ -6365,6 +7091,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -6447,7 +7175,9 @@ paths:
         in: query
         name: tail
         type: string
-      responses: {}
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -6468,6 +7198,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: boolean
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -6645,7 +7377,9 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.ContainerLog'
-      responses: {}
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -7019,6 +7753,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              type: string
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -7052,6 +7790,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -7469,14 +8209,16 @@ paths:
         in: query
         name: tail
         type: string
-      responses: {}
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
       summary: Container logs
       tags:
       - Container
-  /containers/stats/:id:
+  /containers/stats/{id}:
     get:
       parameters:
       - description: container id
@@ -7954,6 +8696,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -8071,7 +8815,7 @@ paths:
         formatEN: update cronjob [name]
         formatZH: 更新计划任务 [name]
         paramKeys: []
-  /dashboard/base/:ioOption/:netOption:
+  /dashboard/base/{ioOption}/{netOption}:
     get:
       consumes:
       - application/json
@@ -8134,7 +8878,7 @@ paths:
       summary: Load dashboard current info
       tags:
       - Dashboard
-  /dashboard/system/restart/:operation:
+  /dashboard/system/restart/{operation}:
     post:
       consumes:
       - application/json
@@ -8310,6 +9054,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -8372,8 +9118,14 @@ paths:
         formatEN: create database [name][type]
         formatZH: 创建远程数据库 [name][type]
         paramKeys: []
-  /databases/db/:name:
+  /databases/db/{name}:
     get:
+      parameters:
+      - description: name
+        in: path
+        name: name
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -8399,6 +9151,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: boolean
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -8446,8 +9200,14 @@ paths:
         formatEN: delete database [names]
         formatZH: 删除远程数据库 [names]
         paramKeys: []
-  /databases/db/item/:type:
+  /databases/db/item/{type}:
     get:
+      parameters:
+      - description: type
+        in: path
+        name: type
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -8461,8 +9221,14 @@ paths:
       summary: Retrieve database list based on type
       tags:
       - Database
-  /databases/db/list/:type:
+  /databases/db/list/{type}:
     get:
+      parameters:
+      - description: type
+        in: path
+        name: type
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -8627,7 +9393,9 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.MysqlLoadDB'
-      responses: {}
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -8685,7 +9453,7 @@ paths:
         formatEN: create postgresql database [name]
         formatZH: 创建 postgresql 数据库 [name]
         paramKeys: []
-  /databases/pg/:database/load:
+  /databases/pg/{database}/load:
     post:
       consumes:
       - application/json
@@ -8696,7 +9464,14 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.PostgresqlLoadDB'
-      responses: {}
+      - description: database
+        in: path
+        name: database
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -9297,6 +10072,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: boolean
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -9332,6 +10109,8 @@ paths:
         paramKeys: []
   /files/chunkupload:
     post:
+      consumes:
+      - multipart/form-data
       parameters:
       - description: request
         in: formData
@@ -9484,6 +10263,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/model.Favorite'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -9544,6 +10325,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/dto.PageResult'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -9647,6 +10430,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.FileLineContent'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -9713,6 +10498,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/dto.PageResult'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -9726,6 +10513,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -9823,6 +10612,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.DirSizeRes'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -9862,6 +10653,8 @@ paths:
       - File
   /files/upload:
     post:
+      consumes:
+      - multipart/form-data
       parameters:
       - description: request
         in: formData
@@ -9899,9 +10692,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/response.FileInfo'
-            type: array
+            $ref: '#/definitions/dto.PageResult'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -9922,6 +10713,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.FileWgetRes'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10087,6 +10880,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10152,7 +10947,9 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.Operate'
-      responses: {}
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10193,6 +10990,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10241,6 +11040,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.HostToolRes'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10261,6 +11062,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.HostToolConfig'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10315,6 +11118,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10356,6 +11161,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.SupervisorProcessConfig'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10402,6 +11209,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10429,6 +11238,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/dto.HostInfo'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10522,7 +11333,9 @@ paths:
         "200":
           description: OK
           schema:
-            type: Array
+            items:
+              $ref: '#/definitions/dto.RedisCommand'
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10641,7 +11454,9 @@ paths:
         "200":
           description: OK
           schema:
-            type: Array
+            items:
+              $ref: '#/definitions/dto.CommandTree'
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10810,8 +11625,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            $ref: '#/definitions/dto.PageResult'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10892,7 +11705,7 @@ paths:
       security:
       - ApiKeyAuth: []
       - Timestamp: []
-      summary: Uodate address group
+      summary: Update address group
       tags:
       - Firewall
   /hosts/firewall/update/description:
@@ -10964,6 +11777,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.MonitorData'
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -10985,16 +11802,14 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/dto.HostTree'
-            type: array
+            $ref: '#/definitions/dto.PageResult'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
       summary: Page host
       tags:
       - Host
-  /hosts/test/byid/:id:
+  /hosts/test/byid/{id}:
     post:
       consumes:
       - application/json
@@ -11029,6 +11844,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: boolean
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11135,8 +11952,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            $ref: '#/definitions/dto.PageResult'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11199,6 +12014,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11210,6 +12027,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              type: string
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11222,7 +12043,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.FileInfo'
+            $ref: '#/definitions/response.NginxFile'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11381,6 +12202,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/model.Runtime'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11394,7 +12217,7 @@ paths:
         formatEN: Create runtime [name]
         formatZH: 创建运行环境 [name]
         paramKeys: []
-  /runtimes/:id:
+  /runtimes/{id}:
     get:
       consumes:
       - application/json
@@ -11407,6 +12230,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.RuntimeDTO'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11454,6 +12279,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.NodeModule'
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11494,6 +12323,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.PackageScripts'
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11625,6 +12458,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/dto.PageResult'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11678,6 +12513,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11868,6 +12705,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11896,6 +12735,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/dto.PageResult'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -11916,6 +12757,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/dto.PageResult'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -12023,7 +12866,7 @@ paths:
           description: OK
           schema:
             items:
-              type: string
+              type: object
             type: array
       security:
       - ApiKeyAuth: []
@@ -12156,6 +12999,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              type: string
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -12566,6 +13413,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.SnapshotFile'
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -12586,6 +13437,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/dto.SnapshotStatus'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -12609,7 +13462,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.SettingInfo'
+            $ref: '#/definitions/dto.SSLInfo'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -12685,6 +13538,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -12808,7 +13663,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.PageResult'
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -12879,7 +13734,9 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.Operate'
-      responses: {}
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -12904,7 +13761,9 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.OperateByID'
-      responses: {}
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -12938,6 +13797,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -13105,6 +13966,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: boolean
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -13125,6 +13988,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              type: string
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -13254,7 +14121,9 @@ paths:
         "200":
           description: OK
           schema:
-            type: Array
+            items:
+              type: string
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -13281,6 +14150,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -13298,7 +14169,9 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.Operate'
-      responses: {}
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -13323,7 +14196,9 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.Operate'
-      responses: {}
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -13345,7 +14220,9 @@ paths:
         "200":
           description: OK
           schema:
-            type: Array
+            items:
+              type: string
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -13507,7 +14384,9 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/dto.Operate'
-      responses: {}
+      responses:
+        "200":
+          description: OK
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -13602,6 +14481,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/dto.CleanData'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -13641,7 +14522,7 @@ paths:
         formatEN: Create website [primaryDomain]
         formatZH: 创建网站 [primaryDomain]
         paramKeys: []
-  /websites/:id:
+  /websites/{id}:
     get:
       consumes:
       - application/json
@@ -13662,7 +14543,7 @@ paths:
       summary: Search website by id
       tags:
       - Website
-  /websites/:id/config/:type:
+  /websites/{id}/config/{type}:
     get:
       consumes:
       - application/json
@@ -13672,6 +14553,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: type
+        in: path
+        name: type
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -13683,7 +14569,7 @@ paths:
       summary: Search website nginx by id
       tags:
       - Website Nginx
-  /websites/:id/https:
+  /websites/{id}/https:
     get:
       consumes:
       - application/json
@@ -13708,6 +14594,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: request
+        in: path
+        name: id
+        required: true
+        type: integer
       - description: request
         in: body
         name: request
@@ -13836,6 +14727,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.NginxAuthRes'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -14145,15 +15038,21 @@ paths:
         formatEN: Nginx conf update [domain]
         formatZH: nginx 配置修改 [domain]
         paramKeys: []
-  /websites/default/html/:type:
+  /websites/default/html/{type}:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: type
+        in: path
+        name: type
+        required: true
+        type: string
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.FileInfo'
+            $ref: '#/definitions/response.WebsiteHtmlRes'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -14268,6 +15167,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.WebsiteDirConfig'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -14464,7 +15365,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.WebsiteDomain'
+            items:
+              $ref: '#/definitions/model.WebsiteDomain'
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -14478,7 +15381,7 @@ paths:
         formatEN: Create domain [domain]
         formatZH: 创建域名 [domain]
         paramKeys: []
-  /websites/domains/:websiteId:
+  /websites/domains/{websiteId}:
     get:
       consumes:
       - application/json
@@ -14548,6 +15451,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.NginxAntiLeechRes'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -14699,7 +15604,7 @@ paths:
           description: OK
           schema:
             items:
-              type: string
+              $ref: '#/definitions/response.WebsiteOption'
             type: array
       security:
       - ApiKeyAuth: []
@@ -14740,7 +15645,7 @@ paths:
         formatEN: '[domain] PHP conf update'
         formatZH: '[domain] PHP 配置修改'
         paramKeys: []
-  /websites/php/config/:id:
+  /websites/php/config/{id}:
     get:
       consumes:
       - application/json
@@ -14841,6 +15746,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              $ref: '#/definitions/request.WebsiteProxyConfig'
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -14927,6 +15836,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.NginxRedirectConfig'
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -15013,6 +15926,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.NginxRewriteRes'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -15103,7 +16018,7 @@ paths:
         formatEN: Create website ssl [primaryDomain]
         formatZH: 创建网站 ssl [primaryDomain]
         paramKeys: []
-  /websites/ssl/:id:
+  /websites/ssl/{id}:
     get:
       consumes:
       - application/json
@@ -15116,6 +16031,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.WebsiteSSLDTO'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -15259,6 +16176,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.WebsiteSSLDTO'
+            type: array
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -15325,7 +16246,7 @@ paths:
         formatEN: Upload ssl [type]
         formatZH: 上传 ssl [type]
         paramKeys: []
-  /websites/ssl/website/:websiteId:
+  /websites/ssl/website/{websiteId}:
     get:
       consumes:
       - application/json
@@ -15338,6 +16259,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.WebsiteSSLDTO'
       security:
       - ApiKeyAuth: []
       - Timestamp: []
@@ -15385,7 +16308,7 @@ securityDefinitions:
       -H "1Panel-Timestamp: <current_unix_timestamp>"
       ```
       - `1Panel-Token` is the key for the panel API Key.
-    in: Header
+    in: header
     name: 1Panel-Token
     type: apiKey
   Timestamp:

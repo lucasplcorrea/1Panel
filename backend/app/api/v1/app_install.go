@@ -13,7 +13,7 @@ import (
 // @Summary Page app installed
 // @Accept json
 // @Param request body request.AppInstalledSearch true "request"
-// @Success 200
+// @Success 200 {object} dto.PageResult
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /apps/installed/search [post]
@@ -45,7 +45,7 @@ func (b *BaseApi) SearchAppInstalled(c *gin.Context) {
 // @Tags App
 // @Summary List app installed
 // @Accept json
-// @Success 200 array dto.AppInstallInfo
+// @Success 200 {array} dto.AppInstallInfo
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /apps/installed/list [get]
@@ -104,10 +104,11 @@ func (b *BaseApi) LoadPort(c *gin.Context) {
 // @Summary Search app password by key
 // @Accept json
 // @Param request body dto.OperationWithNameAndType true "request"
-// @Success 200 {string} response.DatabaseConn
+// @Param key path string true "key"
+// @Success 200 {object} response.DatabaseConn
 // @Security ApiKeyAuth
 // @Security Timestamp
-// @Router /apps/installed/conninfo/:key [get]
+// @Router /apps/installed/conninfo/{key} [get]
 func (b *BaseApi) LoadConnInfo(c *gin.Context) {
 	var req dto.OperationWithNameAndType
 	if err := helper.CheckBindAndValidate(&req, c); err != nil {
@@ -128,7 +129,7 @@ func (b *BaseApi) LoadConnInfo(c *gin.Context) {
 // @Success 200 {array} dto.AppResource
 // @Security ApiKeyAuth
 // @Security Timestamp
-// @Router /apps/installed/delete/check/:appInstallId [get]
+// @Router /apps/installed/delete/check/{appInstallId} [get]
 func (b *BaseApi) DeleteCheck(c *gin.Context) {
 	appInstallId, err := helper.GetIntParamByKey(c, "appInstallId")
 	if err != nil {
@@ -187,7 +188,7 @@ func (b *BaseApi) OperateInstalled(c *gin.Context) {
 // @Success 200 {array} response.AppService
 // @Security ApiKeyAuth
 // @Security Timestamp
-// @Router /apps/services/:key [get]
+// @Router /apps/services/{key} [get]
 func (b *BaseApi) GetServices(c *gin.Context) {
 	key := c.Param("key")
 	services, err := appInstallService.GetServices(key)
@@ -201,7 +202,6 @@ func (b *BaseApi) GetServices(c *gin.Context) {
 // @Tags App
 // @Summary Search app update version by install id
 // @Accept json
-// @Param appInstallId path integer true "request"
 // @Success 200 {array} dto.AppVersion
 // @Security ApiKeyAuth
 // @Security Timestamp
@@ -266,10 +266,10 @@ func (b *BaseApi) GetDefaultConfig(c *gin.Context) {
 // @Summary Search params by appInstallId
 // @Accept json
 // @Param appInstallId path string true "request"
-// @Success 200 {object} response.AppParam
+// @Success 200 {object} response.AppConfig
 // @Security ApiKeyAuth
 // @Security Timestamp
-// @Router /apps/installed/params/:appInstallId [get]
+// @Router /apps/installed/params/{appInstallId} [get]
 func (b *BaseApi) GetParams(c *gin.Context) {
 	appInstallId, err := helper.GetIntParamByKey(c, "appInstallId")
 	if err != nil {

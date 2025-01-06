@@ -28,9 +28,9 @@ var (
 )
 
 func toIndexHtml(c *gin.Context) {
+	c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
 	c.Writer.WriteHeader(http.StatusOK)
 	_, _ = c.Writer.Write(web.IndexByte)
-	c.Writer.Header().Add("Accept", "text/html")
 	c.Writer.Flush()
 }
 
@@ -131,9 +131,9 @@ func setWebStatic(rootRouter *gin.RouterGroup) {
 				handleNoRoute(c)
 				return
 			}
+			c.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
 			c.Writer.WriteHeader(http.StatusOK)
 			_, _ = c.Writer.Write(web.IndexByte)
-			c.Writer.Header().Add("Accept", "text/html")
 			c.Writer.Flush()
 		})
 	}
@@ -175,7 +175,7 @@ func Routers() *gin.Engine {
 
 	swaggerRouter := Router.Group("1panel")
 	docs.SwaggerInfo.BasePath = "/api/v1"
-	swaggerRouter.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	swaggerRouter.Use(middleware.JwtAuth()).Use(middleware.SessionAuth()).GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	PublicGroup := Router.Group("")
 	{
 		PublicGroup.GET("/health", func(c *gin.Context) {

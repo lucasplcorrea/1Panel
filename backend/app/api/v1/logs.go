@@ -21,7 +21,7 @@ func (b *BaseApi) GetLoginLogs(c *gin.Context) {
 		return
 	}
 
-	total, list, err := logService.PageLoginLog(req)
+	total, list, err := logService.PageLoginLog(c, req)
 	if err != nil {
 		helper.ErrorWithDetail(c, constant.CodeErrInternalServer, constant.ErrTypeInternalServer, err)
 		return
@@ -63,7 +63,7 @@ func (b *BaseApi) GetOperationLogs(c *gin.Context) {
 // @Summary Clean operation logs
 // @Accept json
 // @Param request body dto.CleanLog true "request"
-// @Success 200 {object} dto.PageResult
+// @Success 200
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /logs/clean [post]
@@ -84,7 +84,7 @@ func (b *BaseApi) CleanLogs(c *gin.Context) {
 
 // @Tags Logs
 // @Summary Load system log files
-// @Success 200
+// @Success 200 {array} string
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /logs/system/files [get]
@@ -100,7 +100,7 @@ func (b *BaseApi) GetSystemFiles(c *gin.Context) {
 
 // @Tags Logs
 // @Summary Load system logs
-// @Success 200
+// @Success 200 {string} data
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /logs/system [post]
